@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var showAlert2 = false
     @State private var currentQuestion = 1
     @State private var finishQuiz = false
+    @State private var yAxis = -1000
     var body: some View {
         VStack{
             Text("Current Question: \(currentQuestion)")
@@ -34,6 +35,9 @@ struct ContentView: View {
                         option3 = question1.answer3
                         option4 = question1.answer4
                         correctAnswer = question1.correctAnswer
+                        withAnimation(){
+                            yAxis = 0
+                        }
                     }), secondaryButton: .destructive(Text("no press"), action: {
                         
                     })
@@ -47,12 +51,14 @@ struct ContentView: View {
                             correctAmount += 1
                             answerCorrect = true
                             showAlert2 = true
+                            yAxis = -1000
                             
                             
                         }else{
                             answerCorrect = false
                             showAlert2 = true
                             currentQuestion += 1
+                            yAxis = -1000
                         }
                     }label: {
                         Text(option1)
@@ -64,12 +70,14 @@ struct ContentView: View {
                             correctAmount += 1
                             answerCorrect = true
                             showAlert2 = true
+                            yAxis = -1000
                             
                             
                         }else{
                             answerCorrect = false
                             showAlert2 = true
                             currentQuestion += 1
+                            yAxis = -1000
                         }
                     }label: {
                         Text(option2)
@@ -83,12 +91,14 @@ struct ContentView: View {
                             correctAmount += 1
                             answerCorrect = true
                             showAlert2 = true
+                            yAxis = -1000
                             
                             
                         }else{
                             answerCorrect = false
                             showAlert2 = true
                             currentQuestion += 1
+                            yAxis = -1000
                         }
                     }label: {
                         Text(option3)
@@ -100,12 +110,14 @@ struct ContentView: View {
                             correctAmount += 1
                             answerCorrect = true
                             showAlert2 = true
+                            yAxis = -1000
                             
                             
                         }else{
                             answerCorrect = false
                             showAlert2 = true
                             currentQuestion += 1
+                            yAxis = -1000
                         }
                     }label: {
                         Text(option4)
@@ -134,10 +146,22 @@ struct ContentView: View {
                     if currentQuestion == 4{
                         finishQuiz = true
                     }
+                    withAnimation(){
+                        yAxis = 0
+                    }
                 }
             }
-            .sheet("You got \(correctAmount)")
+            .sheet(isPresented: $finishQuiz){
+                VStack{
+                    Image("flashbang")
+                        .resizable()
+                        .scaledToFit()
+                        
+                    Text("You got \(correctAmount) out of 3")
+                }
+            }
         }
+        .offset(y: CGFloat(yAxis))
     }
 }
 struct ContentView_Previews: PreviewProvider {
